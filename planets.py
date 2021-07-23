@@ -47,7 +47,7 @@ def rMag():
 
 
 def tweet_planet(api):
-    imagePath = "./planets.png"
+    imagePath = "./planet.png"
     render_planet()
     api.update_with_media(filename=imagePath)
     time.sleep(900)
