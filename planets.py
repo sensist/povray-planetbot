@@ -1,5 +1,12 @@
 from vapory import *
 import random
+from os import environ
+
+CONSUMER_KEY = environ['CONSUMER_KEY']
+CONSUMER_SECRET = environ['CONSUMER_SECRET']
+ACCESS_KEY = environ['ACCESS_KEY']
+ACCESS_SECRET = environ['ACCESS_SECRET']
+
 
 def generate_planet_color():
     R = random.random()
