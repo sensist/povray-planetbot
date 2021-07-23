@@ -9,9 +9,14 @@ CONSUMER_SECRET = environ['CONSUMER_SECRET']
 ACCESS_KEY = environ['ACCESS_KEY']
 ACCESS_SECRET = environ['ACCESS_SECRET']
 
+print(CONSUMER_KEY)
+print(CONSUMER_SECRET)
+print(ACCESS_KEY)
+print(ACCESS_SECRET)
+
 # Authenticate to Twitter
-auth = tweepy.OAuthHandler("CONSUMER_KEY", "CONSUMER_SECRET")
-auth.set_access_token("ACCESS_TOKEN", "ACCESS_TOKEN_SECRET")
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 
 # Create API object
 api = tweepy.API(auth)

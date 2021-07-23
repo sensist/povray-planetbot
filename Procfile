@@ -1,2 +1,2 @@
-worker: python planets.py
 web: python server.py
+worker: python planets.py
