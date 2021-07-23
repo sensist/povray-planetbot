@@ -80,4 +80,4 @@ scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-2.0],
                included = ["colors.inc", "textures.inc"],
                defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
-scene.render("planet.png", includedirs="./libraries/", width=400, height=300, antialiasing=0.001)
+scene.render("planet.png", includedirs="./libraries", width=400, height=300, antialiasing=0.001)
