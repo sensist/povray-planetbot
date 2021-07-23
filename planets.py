@@ -4,6 +4,7 @@ from os import environ
 
 import tweepy
 
+'''
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
 ACCESS_KEY = environ['ACCESS_KEY']
@@ -23,6 +24,7 @@ api = tweepy.API(auth)
 
 # Create a tweet
 #api.update_status("Hello World!")
+'''
 
 def generate_planet_color():
     R = random.random()
@@ -78,4 +80,4 @@ scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-2.0],
                included = ["colors.inc", "textures.inc"],
                defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
-scene.render("planet.png", width=400, height=300, antialiasing=0.001)
+scene.render("planet.png", includedirs="./libraries/", width=400, height=300, antialiasing=0.001)
