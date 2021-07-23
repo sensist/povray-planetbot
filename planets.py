@@ -2,11 +2,22 @@ from vapory import *
 import random
 from os import environ
 
+import tweepy
+
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
 ACCESS_KEY = environ['ACCESS_KEY']
 ACCESS_SECRET = environ['ACCESS_SECRET']
 
+# Authenticate to Twitter
+auth = tweepy.OAuthHandler("CONSUMER_KEY", "CONSUMER_SECRET")
+auth.set_access_token("ACCESS_TOKEN", "ACCESS_TOKEN_SECRET")
+
+# Create API object
+api = tweepy.API(auth)
+
+# Create a tweet
+api.update_status("Hello World!")
 
 def generate_planet_color():
     R = random.random()
