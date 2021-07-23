@@ -137,18 +137,9 @@ def render_planet():
             'jitter',
             'translate', rLight())
 
-    planet = Sphere ( [0,0,0], 1,
-            Texture ( Pigment( 'color', generate_planet_color()),
-                        Normal ( planet_normal, normal_mag, 'scale', rScale(), 'turbulence', rMag())                                    
-                    ),
-            'scale',[1,1,1],  
-            'rotate',[0,0,0],  
-            'translate',[0,0,0]  
-        )
-
     microplanetChance = random.randint(0,10)
 
-    if microplanetChance > 6:
+    if microplanetChance > 11:
         print("generating microplanet")
         planet = Sphere ( [0,0,0], 1,
                 Texture ( Pigment( 'color', generate_microplanet_color()),
@@ -160,13 +151,43 @@ def render_planet():
             )
         rTreeType = random.randrange(0,1)
         trees = [makeTrees(rTreeType) for x in range(130)]
+        clouds = []
     else:
         trees = []
+        planet = Sphere ( [0,0,0], 1,
+                Texture ( Pigment( 'color', generate_planet_color()),
+                            Normal ( planet_normal, normal_mag, 'scale', rScale(), 'turbulence', rMag())                                    
+                        ),
+                'scale',[1,1,1],  
+                'rotate',[0,0,0],  
+                'translate',[0,0,0]  
+            )
+        cloudChance = random.randint(1,10)
+        if cloudChance > 3:
+            clouds = [Sphere ( [0,0,0], 1,
+                    Texture ( 
+                    Pigment( 'bozo', 
+                        'scale', 0.1, 
+                        'turbulence', 0,
+                        ColorMap([0.00, 'rgb', [0.95, 0.95, 0.95]],
+                                [0.10, 'rgb', [1, 1, 1]],
+                                [0.15, 'rgb', [0.85,0.85,0.85,.25]],
+                                [0.50, 'rgb', [1,1,1,1]],
+                                [1.00, 'rgb', [1,1,1,1]]
+                            )
+                        )
+                    ),
+                    'scale',1.02,  
+                    'rotate',[0,0,0],  
+                    'translate',[0,0,0]  
+                )]
+        else:
+            clouds = []
 
 
     scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-2.5],
                         'look_at', [0 , 0 , 0.0]),
-                objects = [sky, sun, planet] + trees,
+                objects = [sky, sun, planet] + trees + clouds,
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
