@@ -44,30 +44,31 @@ def rMag():
     mag = random.random()
     return(mag)
 
-sky = SkySphere (
-	Pigment (
-		'bozo',
-		PigmentMap (
-			[0.0, 'rgb',[.5,.5,.5]],
-			[0.2, 'rgb',[0,0,0]],
-			[1.0, 'rgb',[0,0,0]]
-        ),
-		'scale', .006
-    )
-)
 
-sun = LightSource([50, 20, -15],
-        'color',[1, 1, 1],
-        'translate', [-5, 5, -5])
 
 def tweet_planet(api):
     imagePath = "./planets.png"
     render_planet()
-    try:
-        api.update_with_media(filename=imagePath)
-        time.sleep(900)
+    api.update_with_media(filename=imagePath)
+    time.sleep(900)
 
 def render_planet():
+    sky = SkySphere (
+        Pigment (
+            'bozo',
+            PigmentMap (
+                [0.0, 'rgb',[.5,.5,.5]],
+                [0.2, 'rgb',[0,0,0]],
+                [1.0, 'rgb',[0,0,0]]
+            ),
+            'scale', .006
+        )
+    )
+
+    sun = LightSource([50, 20, -15],
+            'color',[1, 1, 1],
+            'translate', [-5, 5, -5])
+
     planet = Sphere ( [0,0,0], 1,
             Texture ( Pigment( 'color', generate_planet_color()),
                         Normal ( choose_random_normal(), rMag(), 'scale', rMag(), 'turbulence', rMag())                                    
