@@ -1,6 +1,7 @@
 from vapory import *
 import random
 from os import environ
+import time
 
 import tweepy
 
@@ -64,6 +65,7 @@ def tweet_planet(api):
     render_planet()
     try:
         api.update_with_media(filename=imagePath)
+        time.sleep(900)
     except Exception as e:
         break
 
@@ -84,3 +86,7 @@ def render_planet():
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
     scene.render("planet.png", includedirs=["./libraries"], width=400, height=300, antialiasing=0.001)
+
+
+if __name__ == "__main__":
+    tweet_planet(tweepy_creds())
