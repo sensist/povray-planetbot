@@ -22,7 +22,7 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 # Create a tweet
-api.update_status("Hello World!")
+#api.update_status("Hello World!")
 
 def generate_planet_color():
     R = random.random()
