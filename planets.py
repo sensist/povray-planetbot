@@ -66,8 +66,6 @@ def tweet_planet(api):
     try:
         api.update_with_media(filename=imagePath)
         time.sleep(900)
-    except Exception as e:
-        break
 
 def render_planet():
     planet = Sphere ( [0,0,0], 1,
