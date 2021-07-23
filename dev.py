@@ -1,22 +1,9 @@
 from vapory import *
 import random
 from os import environ
-import time
+import time, string
 
 import tweepy
-
-def tweepy_creds():
-    CONSUMER_KEY = environ['CONSUMER_KEY']
-    CONSUMER_SECRET = environ['CONSUMER_SECRET']
-    ACCESS_KEY = environ['ACCESS_KEY']
-    ACCESS_SECRET = environ['ACCESS_SECRET']
-
-    # Authenticate to Twitter
-    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-
-    # Create API object
-    return tweepy.API(auth)
 
 def exoplanet_id():
     ID1 = random.choice(string.ascii_letters).upper()
@@ -172,11 +159,5 @@ def render_planet():
 
     scene.render("planet.png", includedirs=["./libraries"], width=800, height=600, antialiasing=0.001)
 
-def tweet_planet(api):
-    imagePath = "./planet.png"
-    render_planet()
-    api.update_with_media(filename=imagePath)
-    time.sleep(1800)
-
-if __name__ == "__main__":
-    tweet_planet(tweepy_creds())
+print(exoplanet_id())
+render_planet()
