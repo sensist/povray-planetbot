@@ -1,4 +1,4 @@
-import random
+import random, string
 from utils import *
 
 def exoplanet_id():
