@@ -197,7 +197,7 @@ def tweet_planet(api):
     imagePath = "./planet.png"
     render_planet()
     api.update_with_media(filename=imagePath, status=exoplanet_id())
-    time.sleep(1800)
+    time.sleep(7200)
 
 if __name__ == "__main__":
     tweet_planet(tweepy_creds())
