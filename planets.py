@@ -1,7 +1,9 @@
-from vapory import *
-import random
+import random, time, string
 from os import environ
-import time, string
+from vapory import *
+from gen import *
+from planet_objects import *
+from utils import *
 
 import tweepy
 
@@ -18,176 +20,51 @@ def tweepy_creds():
     # Create API object
     return tweepy.API(auth)
 
-def exoplanet_id():
-    ID1 = random.choice(string.ascii_letters).upper()
-    ID2 = random.choice(string.ascii_letters).upper()
-    ID3 = random.randint(1000,9999)
-    return(str(ID1+ID2) + "-" + str(ID3))
-
-def rgb2pov(red,green,blue):
-    red = red/255
-    green = green/255
-    blue = green/255
-    return([red,green,blue])
-
-
-def generate_planet_color():
-    R = random.random()
-    G = random.random()
-    B = random.random()
-    return([R,G,B])
-
-def generate_microplanet_color():
-    R = random.randint(25,70)
-    G = random.randint(40,70)
-    B = 25
-    rgb = rgb2pov(R,G,B)
-    return(rgb)
-
-def choose_random_normal():
-    choices = [
-        'agate',
-        'bozo',
-        'bumps',
-        'crackle',
-        'granite',
-        'dents']
-    choice = random.randint(0,len(choices)-1)
-    print(choices[choice])
-    return(choices[choice])
-
-def rMag():
-    mag = random.random()+.1
-    print(mag)
-    return(mag)
-
-def rScale():
-    mag = random.randrange(1,5)/100
-    print(mag)
-    return(mag)
-
-def rLight():
-    x = random.randint(-50,50)
-    y = random.randint(-50,50)
-    z = random.randint(-50,0)
-    return([x,y,z])
-
-def makeTrees(rTreeType):
-    if rTreeType == 0:
-        trees = Union(
-            Cylinder([0,0,0],[0,1,0], 0.15,
-                Texture(Pigment ('color', rgb2pov(54, 36, 22)),
-                Normal('marble',.5,'scale',.5,'turbulence',.5)),
-                'translate', [0,0,0] 
-            ),
-            Cone([0,0,0],0.5,[0,1.5,0],0,
-                Texture(Pigment('color', rgb2pov(14, 71, 29)),
-                Normal('marble',.5,'scale',.5,'turbulence',.5)),
-                'translate', [0,.5,0]
-            ),
-            'scale', [.1,.1,.1],
-            'translate', [0,1,0],
-            'rotate', [random.randint(-360,360),0,random.randint(-360,360)]
-        )
-    else:
-        trees = Union(
-            Cylinder([0,0,0],[0,1,0], 0.15,
-                Texture(Pigment ('color', rgb2pov(54, 36, 22)),
-                Normal('marble',.5,'scale',.5,'turbulence',.5)),
-                'translate', [0,0,0] 
-            ),
-            Sphere ( [0,0,0], 1,
-                Texture(Pigment('color', rgb2pov(14, 71, 29)),
-                Normal('marble',.5,'scale',.5,'turbulence',.5)),
-                'translate', [0,1.5,0],
-                'scale', .5 
-            ),
-            'scale', [.1,.1,.1],
-            'translate', [0,1,0],
-            'rotate', [random.randint(0,360),0,random.randint(0,360)]
-        )        
-    return(trees)
-
 def render_planet():
 
     planet_normal = choose_random_normal()
+    planet_color = generate_planet_color()
     normal_mag = rMag()
     if planet_normal == 'bozo' or planet_normal == "dents":
-        print("bozo time")
         normal_mag = random.randint(1,15)
         print(normal_mag)
     
-    sky = SkySphere (
-        Pigment (
-            'bozo',
-            PigmentMap (
-                [0.0, 'rgb',[.5,.5,.5]],
-                [0.2, 'rgb',[0,0,0]],
-                [1.0, 'rgb',[0,0,0]]
-            ),
-            'scale', .006,
-            'rotate',[0,0,random.randint(0,360)]
-        )
-    )
+    sky = drawStars()
 
-    sun = LightSource([0, 0, 0],
-            'color',[1, 1, 1],
-            'area_light', [0,0,0],[10,0,-10], 4, 4,
-            'adaptive', 0,
-            'jitter',
-            'translate', rLight())
+    sun = drawSun()
 
     microplanetChance = random.randint(0,10)
 
-    if microplanetChance > 11:
+    if microplanetChance > 6:
         print("generating microplanet")
-        planet = Sphere ( [0,0,0], 1,
-                Texture ( Pigment( 'color', generate_microplanet_color()),
-                            Normal ( planet_normal, normal_mag, 'scale', rScale(), 'turbulence', rMag())                                    
-                        ),
-                'scale',[1,1,1],  
-                'rotate',[0,0,0],  
-                'translate',[0,0,0]  
-            )
-        rTreeType = random.randrange(0,1)
+        planet = drawPlanet(generate_microplanet_color(), planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
+        rTreeType = random.randint(0,1)
+        print("tree type: " + str(rTreeType))
         trees = [makeTrees(rTreeType) for x in range(130)]
         clouds = []
+        rings = []
     else:
         trees = []
-        planet = Sphere ( [0,0,0], 1,
-                Texture ( Pigment( 'color', generate_planet_color()),
-                            Normal ( planet_normal, normal_mag, 'scale', rScale(), 'turbulence', rMag())                                    
-                        ),
-                'scale',[1,1,1],  
-                'rotate',[0,0,0],  
-                'translate',[0,0,0]  
-            )
+        planet = drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
+        
+        #Generate chance of clouds
         cloudChance = random.randint(1,10)
+        ringChance = random.randint(1,10)
         if cloudChance > 6:
-            clouds = [Sphere ( [0,0,0], 1,
-                    Texture ( 
-                    Pigment( 'bozo', 
-                        'scale', 0.1, 
-                        'turbulence', 0,
-                        ColorMap([0.00, 'rgb', [0.95, 0.95, 0.95]],
-                                [0.10, 'rgb', [1, 1, 1]],
-                                [0.15, 'rgb', [0.85,0.85,0.85,.25]],
-                                [0.50, 'rgb', [1,1,1,1]],
-                                [1.00, 'rgb', [1,1,1,1]]
-                            )
-                        )
-                    ),
-                    'scale',1.02,  
-                    'rotate',[random.randint(0,360),random.randint(0,360),random.randint(0,360)],  
-                    'translate',[0,0,0]  
-                )]
+            clouds = [drawClouds()]
+            rings = []
         else:
             clouds = []
+            if ringChance > 6:
+                rings = drawRings(planet_color)
+            else:
+                rings = []
 
 
-    scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-2.5],
+
+    scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-3.5],
                         'look_at', [0 , 0 , 0.0]),
-                objects = [sky, sun, planet] + trees + clouds,
+                objects = [sky, sun, planet] + trees + clouds + rings,
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
