@@ -163,7 +163,7 @@ def render_planet():
                 'translate',[0,0,0]  
             )
         cloudChance = random.randint(1,10)
-        if cloudChance > 3:
+        if cloudChance > 6:
             clouds = [Sphere ( [0,0,0], 1,
                     Texture ( 
                     Pigment( 'bozo', 
@@ -178,7 +178,7 @@ def render_planet():
                         )
                     ),
                     'scale',1.02,  
-                    'rotate',[0,0,0],  
+                    'rotate',[random.randint(0,360),random.randint(0,360),random.randint(0,360)],  
                     'translate',[0,0,0]  
                 )]
         else:
