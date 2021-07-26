@@ -32,6 +32,16 @@ def choose_random_normal():
     print(choices[choice])
     return(choices[choice])
 
+def choose_moon_normal():
+    choices = [
+        'bumps',
+        'crackle',
+        'dents',
+        'granite']
+    choice = random.randint(0,len(choices)-1)
+    print(choices[choice])
+    return(choices[choice])
+
 def rMag():
     mag = random.random()+.1
     print(mag)

@@ -49,7 +49,7 @@ def drawStars():
                     [0.2, 'rgb',[0,0,0]],
                     [1.0, 'rgb',[0,0,0]]
                 ),
-                'scale', .006,
+                'scale', .003,
                 'rotate',[0,0,random.randint(0,360)]
             )
         )
@@ -77,18 +77,21 @@ def drawPlanet(color, normal, normal_mag,mag, scale, rotate, translate):
     return(planet)
 
 def drawClouds():
+
+    scale = random.random()
+
     clouds = Sphere ( [0,0,0], 1,
                         Texture ( 
-                        Pigment( 'bozo', 
-                            'scale', 0.1, 
-                            'turbulence', 0,
+                        Pigment( 'bozo',
+                            'scale',.15,
                             ColorMap([0.00, 'rgb', [0.95, 0.95, 0.95]],
                                     [0.10, 'rgb', [1, 1, 1]],
                                     [0.15, 'rgb', [0.85,0.85,0.85,.25]],
                                     [0.50, 'rgb', [1,1,1,1]],
-                                    [1.00, 'rgb', [1,1,1,1]]
+                                    [1.00, 'rgb', [1,1,1,.85]]
                                 )
-                            )
+                            ),
+                            'translate',[0,3,0]
                         ),
                         'scale',1.02,  
                         'rotate',[random.randint(0,360),random.randint(0,360),random.randint(0,360)],  
@@ -104,14 +107,14 @@ def drawRings(planet_color):
     ring_rot_y = random.randint(-45,45)
     ring_rot_z = random.randint(-45,45)
 
-    if invert_chance > 11:
+    if invert_chance > 6:
         ring_color = [planet_color[0]+random.random(),planet_color[1]+random.random(),planet_color[2]+random.random()]
     else:
         ring_color = [1-planet_color[0]+random.random(),1-planet_color[1]+random.random(),1-planet_color[2]+random.random()]
 
     rings = [
         Difference(
-        Cylinder([0,0,0],[0,0,.005], 1.65,
+        Cylinder([0,0,0],[0,0,.005], 2,
                 Texture(Pigment ('wood', 'frequency',3,
                     ColorMap([0.00,'rgb', [ring_color[0],ring_color[1],ring_color[2], 0]],
                              [0.10,'rgb', [ring_color[0],ring_color[1],ring_color[2], .85]],
@@ -136,4 +139,53 @@ def drawRings(planet_color):
         )
     ]
     return(rings)
+
+def drawMoon():
+
+    moon_normal = choose_random_normal()
+
+    moon_rot_x = random.randint(-15,15)
+    moon_rot_y = random.randint(-45,45)
+    moon_rot_z = random.randint(-45,45)
+
+    moon = [Sphere ( [0,0,0], 1,
+        Texture ( 
+            Pigment( 'color', [1,.9,.8]),
+            Normal ( moon_normal, .5, 'scale', .5)                                    
+        ),
+        'scale',.15,
+        'translate',[1.75,0,0],
+        'rotate',[moon_rot_x,0,moon_rot_z] 
+        )]
+    return(moon)
+
+def drawUFO():
+
+    ufo_pos_x = random.randint(0,2)
+    if ufo_pos_x == 0:
+        ufo_pos_x = -2
+    ufo_pos_y = random.randrange(-1,1)
+
+    ufo = Union(
+        Sphere([0,0,0],1,
+            Texture (
+            Pigment ('color', [0,1,0]),
+            Finish ('reflection', .25)
+            ),
+        'scale',.25,
+        'translate',[0,.2,0]
+        ),
+        Cone([0,0,0],1,[0,.25,0],0,
+            Texture(Pigment('color', [.75,.75,.75]),
+            Finish('metallic',.75))
+        ),
+        Cone([0,0,0],1,[0,.25,0],0,
+            Texture(Pigment('color', [.75,.75,.75]),
+            Finish('metallic',.75, 'reflection', .25)),
+            'rotate',[180,0,0]
+        ),
+        'scale',.25,
+        'translate',[ufo_pos_x,ufo_pos_y,0]
+    )
+    return(ufo)
       

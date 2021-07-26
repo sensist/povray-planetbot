@@ -34,8 +34,12 @@ def render_planet():
     sun = drawSun()
 
     microplanetChance = random.randint(0,10)
+    cloudChance = random.randint(1,10)
+    ringChance = random.randint(1,10)
+    moonChance = random.randint(1,10)
+    ufoChance = random.randint(1,1000)
 
-    if microplanetChance > 6:
+    if microplanetChance > 9:
         print("generating microplanet")
         planet = drawPlanet(generate_microplanet_color(), planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
         rTreeType = random.randint(0,1)
@@ -43,28 +47,38 @@ def render_planet():
         trees = [makeTrees(rTreeType) for x in range(130)]
         clouds = []
         rings = []
+        moons = []
     else:
         trees = []
         planet = drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
         
         #Generate chance of clouds
-        cloudChance = random.randint(1,10)
-        ringChance = random.randint(1,10)
+
         if cloudChance > 6:
+            print("clouds")
             clouds = [drawClouds()]
             rings = []
         else:
             clouds = []
-            if ringChance > 6:
-                rings = drawRings(planet_color)
-            else:
-                rings = []
+        if ringChance > 6 and clouds == []:
+            print("rings")
+            rings = drawRings(planet_color)
+        else:
+            rings = []
+        if moonChance > 6 and rings == []:
+            print("moons")
+            moons = drawMoon()
+        else:
+            moons = []
+        
+    if ufoChance == 999:
+        ufo = [drawUFO()]
+    else:
+        ufo = []
 
-
-
-    scene = Scene( Camera('angle', 75,'location',  [0.0 , 0,-3.5],
+    scene = Scene( Camera('angle', 30,'location',  [0.0 , 0,-10],
                         'look_at', [0 , 0 , 0.0]),
-                objects = [sky, sun, planet] + trees + clouds + rings,
+                objects = [sky, sun, planet] + trees + clouds + rings + moons+ ufo,
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
