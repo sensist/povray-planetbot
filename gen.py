@@ -1,4 +1,5 @@
 import random, string
+from vapory import *
 from utils import *
 
 def exoplanet_id():
@@ -19,6 +20,12 @@ def generate_microplanet_color():
     B = 25
     rgb = rgb2pov(R,G,B)
     return(rgb)
+
+def color_variation(color):
+    R = color[0]+(random.randint(-5,5)/100)
+    G = color[1]+(random.randint(-5,5)/100)
+    B = color[2]+(random.randint(-5,5)/100)
+    return([R,G,B])
 
 def choose_random_normal():
     choices = [
