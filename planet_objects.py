@@ -13,9 +13,14 @@ def makeTrees(rTreeType):
                 'translate', [0,0,0] 
             ),
             Cone([0,0,0],0.5,[0,1.5,0],0,
-                Texture(Pigment('color', rgb2pov(14, 71, 29)),
+                Texture(Pigment('color', [0.066, 0.152, 0.066]),
                 Normal('marble',.5,'scale',.5,'turbulence',.5)),
                 'translate', [0,.5,0]
+            ),
+            Cone([0,0,0],0.5,[0,1.5,0],0,
+                Texture(Pigment('color', [0.066, 0.152, 0.066]),
+                Normal('marble',.5,'scale',.5,'turbulence',.5)),
+                'translate', [0,.75,0]
             ),
             'scale', [.1,.1,.1],
             'translate', [0,1,0],
@@ -29,7 +34,7 @@ def makeTrees(rTreeType):
                 'translate', [0,0,0] 
             ),
             Sphere ( [0,0,0], 1,
-                Texture(Pigment('color', rgb2pov(14, 71, 29)),
+                Texture(Pigment('color', [0.066, 0.152, 0.066]),
                 Normal('marble',.5,'scale',.5,'turbulence',.5)),
                 'translate', [0,1.5,0],
                 'scale', .5 
@@ -188,4 +193,150 @@ def drawUFO():
         'translate',[ufo_pos_x,ufo_pos_y,0]
     )
     return(ufo)
-    
+
+def drawFireTower():
+    fire_tower = Union(
+        Difference(
+            Difference(
+                Difference( #tower+legs
+                    Box([0,0,0],[2,6.25,2],
+                        Pigment('color', 'White')
+                    ),
+                    Union(
+                        Box([.25,0,-5],[1.75,4.5,5],
+                        Pigment('color', 'White'),
+                        'translate', [0,0,1]
+                        ),
+                        Box([-5,0,.25],[5,4.5,1.75],
+                        Pigment('color', 'White'),
+                        'translate',[1,0,0]
+                        )
+                    )
+                ),
+                Box([.1,4.75,.1],[1.9,6,1.9],
+                    Texture(Pigment('color', [.38,.38,.38]))
+                )
+            ),
+            Union(
+                Box([1.1,5.15,-5],[1.9,5.85,5]),
+                Box([.1,5.15,-5], [.95,5.85,5]),
+                Box([-5,5.15,.1], [5,5.85,.95]),
+                Box([-5,5.15,1.1],[5,5.85,1.9]),
+                Texture(Pigment('color', [.38,.38,.38]))
+            )
+        ),
+        Difference(
+            Union(
+                Box([0,0,0],[.25,2.5,2],
+                    Pigment('color','White'),
+                    'rotate',[0,0,-45],
+                    'translate',[0,.25,0]
+                ),
+                Box([0,0,0],[.25,2.5,2],
+                    Pigment('color','White'),
+                    'rotate',[0,0,45],
+                    'translate',[1.75,2,0]
+                )
+            ),
+            Box([-3,0,.25],[3,6.25,1.75],
+                Pigment('color', 'White')
+            ),
+            'rotate',[0,90,0],
+            'translate',[0,.25,2]
+        ),
+
+        Difference(
+            Union(
+                Box([0,0,0],[.25,2.5,2],
+                    Pigment('color','White'),
+                    'rotate',[0,0,-45],
+                    'translate',[0,.25,0]
+                ),
+                Box([0,0,0],[.25,2.5,2],
+                    Pigment('color','White'),
+                    'rotate',[0,0,45],
+                    'translate',[1.75,2,0]
+                )
+            ),
+            Box([-3,0,.25],[3,6.25,1.75],
+                Pigment('color', 'White')
+            ),
+            'translate',[0,.25,0]
+        ),
+        Prism('conic_sweep',0,1,5,
+            [1,1],
+            [-1,1],
+            [-1,-1],
+            [1,-1],
+            [1,1],
+            Texture(Pigment('color', [.38,.38,.38])),
+            'rotate',[180,0,0],
+            'scale',[1.25,1,1.25],
+            'translate',[1,7.15,1]
+        ),
+        'scale', [.05,.05,.05],
+        'translate', [0,1,0],
+        'rotate', [random.randint(-120,-10),0,random.randint(-120,-10)]
+    )
+    return(fire_tower)
+
+def drawTent():
+    tent = Union(
+        Difference(
+            Prism(0,2,4,
+                [-1,0],
+                [1,0],
+                [0,2],
+                [-1,0],
+                Texture(Pigment('color', [0.470, 0.415, 0.247])),
+                'rotate',[-90,0,0],
+                'translate',[0,0,0],
+            ),
+            Prism(0,1.75,4,
+                    [-1,0],
+                    [1,0],
+                    [0,2],
+                    [-1,0],
+                    Texture(Pigment('color', [0.470, 0.415, 0.247])),
+                    'scale',[.95,3,.85],
+                    'rotate',[-90,0,0],
+                    'translate',[0,0,0],
+                ) 
+        ), 
+        Union(
+            Merge(
+                Cylinder([0,0,0],[0,0,2], 0.2,
+                    Texture(Pigment ('color', [0.227, 0.164, 0.094]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                Cylinder([0,0,0],[0,0,2], 0.185,
+                    Texture(Pigment ('color', [0.627, 0.494, 0.329]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                'translate',[0,0,-1]
+            ),
+            Merge(
+                Cylinder([0,0,0],[0,0,2], 0.2,
+                    Texture(Pigment ('color', [0.227, 0.164, 0.094]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                Cylinder([0,0,0],[0,0,2], 0.185,
+                    Texture(Pigment ('color', [0.627, 0.494, 0.329]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                'rotate',[0,90,0],
+                'translate',[-1,0,0]
+            ),
+            'rotate',[.75,.75,.75],
+            'rotate',[0,45,0],
+            'translate',[0,0,-3.5]           
+        ),
+        'scale', [.05,.05,.05],
+        'translate', [0,.99,0],
+        'rotate', [random.randint(-120,-30),0,random.randint(-120,-30)]
+    )
+    return(tent)     

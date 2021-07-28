@@ -2,7 +2,6 @@ from vapory import *
 
 sun = LightSource([-2500,2500,-1500], 'color', 'White')
 
-
 sky = Plane([0,1,0], 1, 'hollow',  
             Texture( Pigment( 'bozo',
                               'turbulence', 0.92,
@@ -21,74 +20,63 @@ ground = Plane( [0,1,0], 0,
                      Normal('bumps', 0.75, 'scale', 0.0125),
                      Finish('phong', 0.1))) 
 
+
 model = Union(
-    Difference(
-        Box([0,0,0],[2,6.25,2],
-            Pigment('color', 'White')
-        ),
-        Union(
-            Box([.25,0,-5],[1.75,4.5,5],
-            Pigment('color', 'White'),
-            'translate', [0,0,1]
+        Difference(
+            Prism(0,2,4,
+                [-1,0],
+                [1,0],
+                [0,2],
+                [-1,0],
+                Texture(Pigment('color', [0.470, 0.415, 0.247])),
+                'rotate',[-90,0,0],
+                'translate',[0,0,0],
             ),
-            Box([-5,0,.25],[5,4.5,1.75],
-            Pigment('color', 'White'),
-            'translate',[1,0,0]
-            )
+            Prism(0,1.75,4,
+                    [-1,0],
+                    [1,0],
+                    [0,2],
+                    [-1,0],
+                    Texture(Pigment('color', [0.470, 0.415, 0.247])),
+                    'scale',[.95,3,.85],
+                    'rotate',[-90,0,0],
+                    'translate',[0,0,0],
+                ) 
+        ), 
+        Union(
+            Merge(
+                Cylinder([0,0,0],[0,0,2], 0.2,
+                    Texture(Pigment ('color', [0.227, 0.164, 0.094]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                Cylinder([0,0,0],[0,0,2], 0.185,
+                    Texture(Pigment ('color', [0.627, 0.494, 0.329]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                'translate',[0,0,-1]
+            ),
+            Merge(
+                Cylinder([0,0,0],[0,0,2], 0.2,
+                    Texture(Pigment ('color', [0.227, 0.164, 0.094]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                Cylinder([0,0,0],[0,0,2], 0.185,
+                    Texture(Pigment ('color', [0.627, 0.494, 0.329]),
+                    Normal('wood',1,'scale',.5,'turbulence',.5)),
+                    'translate', [0,0,0] 
+                ),
+                'rotate',[0,90,0],
+                'translate',[-1,0,0]
+            ),
+            'rotate',[.75,.75,.75],
+            'rotate',[0,45,0],
+            'translate',[0,0,-3.5]           
         )
-    ),
+    )
 
-    Difference(
-        Union(
-            Box([0,0,0],[.25,2.5,2],
-                Pigment('color','White'),
-                'rotate',[0,0,-45],
-                'translate',[0,.25,0]
-            ),
-            Box([0,0,0],[.25,2.5,2],
-                Pigment('color','White'),
-                'rotate',[0,0,45],
-                'translate',[1.75,2,0]
-            )
-        ),
-        Box([-3,0,.25],[3,6.25,1.75],
-            Pigment('color', 'White')
-        ),
-        'rotate',[0,90,0],
-        'translate',[0,.25,2]
-    ),
-
-    Difference(
-        Union(
-            Box([0,0,0],[.25,2.5,2],
-                Pigment('color','White'),
-                'rotate',[0,0,-45],
-                'translate',[0,.25,0]
-            ),
-            Box([0,0,0],[.25,2.5,2],
-                Pigment('color','White'),
-                'rotate',[0,0,45],
-                'translate',[1.75,2,0]
-            )
-        ),
-        Box([-3,0,.25],[3,6.25,1.75],
-            Pigment('color', 'White')
-        ),
-        'translate',[0,.25,0]
-    ),
-    Prism('conic_sweep',0,1,5,
-        [1,1],
-        [-1,1],
-        [-1,-1],
-        [1,-1],
-        [1,1],
-        Texture(Pigment('color', [.38,.38,.38])),
-        'rotate',[180,0,0],
-        'scale',[1.25,1,1.25],
-        'translate',[1,7.15,1]
-    ),
-    'translate', [0,0,-2]
-)
 scene = Scene( Camera('angle', 30,'location',  [20.0 , 20,-20],
                         'look_at', [0 , 0 , 0.0]),
                 objects = [sky, sun, ground,model],

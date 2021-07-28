@@ -33,21 +33,22 @@ def render_planet():
 
     sun = drawSun()
 
-    microplanetChance = random.randint(0,10)
+    microplanetChance = random.randint(1,1)
     cloudChance = random.randint(1,10)
     ringChance = random.randint(1,10)
     moonChance = random.randint(1,10)
     ufoChance = random.randint(1,1000)
 
-    if microplanetChance > 9:
+    if microplanetChance > 0:
         print("generating microplanet")
-        planet = drawPlanet(generate_microplanet_color(), planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
+        planet = drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0])
         rTreeType = random.randint(0,1)
         print("tree type: " + str(rTreeType))
-        trees = [makeTrees(rTreeType) for x in range(130)]
+        trees = [makeTrees(rTreeType) for x in range(150)]
         clouds = []
         rings = []
         moons = []
+        fire_tower = [drawFireTower()] + [drawTent()]
     else:
         trees = []
         planet = drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
@@ -78,7 +79,7 @@ def render_planet():
 
     scene = Scene( Camera('angle', 30,'location',  [0.0 , 0,-10],
                         'look_at', [0 , 0 , 0.0]),
-                objects = [sky, sun, planet] + trees + clouds + rings + moons+ ufo,
+                objects = [sky, sun, planet] + trees + clouds + rings + moons+ ufo + fire_tower,
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
