@@ -339,4 +339,141 @@ def drawTent():
         'translate', [0,.99,0],
         'rotate', [random.randint(-120,-30),0,random.randint(-120,-30)]
     )
-    return(tent)     
+    return(tent) 
+
+def drawStarFissure():
+    fissure = Union(
+        Prism(0,6,16,
+                [2,7],
+                [3,6],
+                [3.25,5],
+                [3,4.5],
+                [3.25,4],
+                [3,3],
+                [3.25,2],
+                [3,1.5],
+                [2.5,0],
+                [1.5,1],
+                [1,2.25],
+                [1.5,3],
+                [1,4],
+                [1.5,5],
+                [2,6],
+                [2,7],
+                Pigment (
+                    'bozo',
+                    PigmentMap (
+                        [0.0, 'rgb',[1,1,1]],
+                        [0.3, 'rgb',[0,0,0]],
+                        [1.0, 'rgb',[0,0,0]]
+                    ),
+                    'scale', .1
+            )
+        ),
+        'scale',[.065,.1,.1],
+        'translate', [-.25,.5,0],
+        'rotate',[-90,0,-30]
+    )
+    return(fissure) 
+
+def drawRocket():
+    rocket = Union(
+        Difference(
+            Union(
+                Sphere([0,0,0],1,
+                    Pigment('color','White'),
+                    'scale',[1,2.5,1],
+                    'translate',[0,2,0]
+                ),
+                Cone([0,0,0],.75, [0,2,0],0,
+                    Pigment('color','Red'),
+                    'translate',[0,3.65,0]
+                )
+            ),
+            Box([-1,-1,-1],[1,.15,1])
+        ),
+        Difference(
+            Difference(
+                Union (
+                    Cylinder([0,0,0],[0,0,.1],2,
+                        'translate',[0,-1,0]
+                    ),
+                    Cylinder([0,0,0],[.1,0,0],2,
+                        'translate',[0,-1,0]
+                    ),
+                ),
+                Sphere([0,0,0],1.5,
+                    'translate',[0,-1.5,0]
+                ),
+                Pigment('color', 'Red'),
+                'translate',[0,.5,0]
+            ),
+            Box([-4,-4,-4],[4,-2,4])
+        ),
+        'rotate',[0,45,0],
+        'translate',[0,2,0]
+    )
+
+    lattice = Union(
+                Box([0,0,0],[.1,1.25,.1],
+                    'rotate',[0,0,-45]
+                ),
+                Box([0,0,0],[.1,1.25,.1],
+                    'rotate',[0,0,45],
+                    'translate',[.9,1,0]
+                ),
+                Box([0,0,0],[.1,1.25,.1],
+                    'rotate',[0,0,-45],
+                    'translate',[0,2,0]
+                ),
+                Box([0,0,0],[.1,1.25,.1],
+                    'rotate',[0,0,45],
+                    'translate',[.9,3,0]
+                ),
+                Box([0,0,0],[.1,1.25,.1],
+                    'rotate',[0,0,-45],
+                    'translate',[0,4,0]
+                ),
+                Pigment('color','Grey'),
+                'translate',[0,.5,0],
+            )
+
+    model = Union(
+        rocket,
+        Union(
+            Difference(
+                Box([0,0,0],[1,5.5,1],
+                    Pigment('color','Grey')
+                ),
+                Union(
+                    Box([-2,0,.1],[2,5.4,.9],
+                        'translate',[1,0,0]
+                    ),
+                    Box([.1,0,2],[.9,5.4,-2],
+                        'translate',[0,0,0]
+                    ),
+                    Pigment('color', 'Grey')           
+                )
+            ),
+            lattice,
+            Union(
+                lattice,
+                'rotate',[0,90,0],
+                'translate',[0,0,1]
+            ),
+            Union(
+                lattice,
+                'rotate',[0,-90,0],
+                'translate',[1,0,0]
+            ),
+            Union(
+                lattice,
+                'translate',[0,0,1]
+            ),
+            'translate',[-2.5,0,-.5]
+        ),
+        'scale', [.05,.05,.05],
+        'translate', [0,1,0],
+        'rotate', [random.randint(-120,-10),0,random.randint(-120,-10)]        
+    )
+    return(model)

@@ -38,48 +38,52 @@ def render_planet():
     ringChance = random.randint(1,10)
     moonChance = random.randint(1,10)
     ufoChance = random.randint(1,1000)
+    starFissureChance = random.randint(1,1000)
+
+    objects = []
 
     if microplanetChance > 0:
         print("generating microplanet")
-        planet = drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0])
         rTreeType = random.randint(0,1)
         print("tree type: " + str(rTreeType))
-        trees = [makeTrees(rTreeType) for x in range(150)]
-        clouds = []
-        rings = []
-        moons = []
-        fire_tower = [drawFireTower()] + [drawTent()]
+        objects = objects + [makeTrees(rTreeType) for x in range(150)]
+        if starFissureChance == 999:
+            planet = Difference(
+                drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0]),
+                drawStarFissure()
+            )
+        else:
+            planet = drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0])
+
+        fire_tower = drawFireTower()
+        rocket = drawRocket()
+
+
+        objects = objects + [planet] + [fire_tower] + [rocket]
+
     else:
-        trees = []
-        planet = drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])
+        objects = objects + [drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])]
         
         #Generate chance of clouds
 
         if cloudChance > 6:
             print("clouds")
-            clouds = [drawClouds()]
-            rings = []
-        else:
-            clouds = []
+            objects = objects + [drawClouds()]
         if ringChance > 6 and clouds == []:
             print("rings")
-            rings = drawRings(planet_color)
-        else:
-            rings = []
+            objects = objects + drawRings(planet_color)
         if moonChance > 6 and rings == []:
             print("moons")
-            moons = drawMoon()
-        else:
-            moons = []
+            objects = objects + drawMoon()
         
     if ufoChance == 999:
-        ufo = [drawUFO()]
-    else:
-        ufo = []
+        objects = objects + [drawUFO()]
+
+    #default camera ('angle', 30, 'location', [0.0,0,-10])
 
     scene = Scene( Camera('angle', 30,'location',  [0.0 , 0,-10],
                         'look_at', [0 , 0 , 0.0]),
-                objects = [sky, sun, planet] + trees + clouds + rings + moons+ ufo + fire_tower,
+                objects = objects + [sky, sun, planet],
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 
