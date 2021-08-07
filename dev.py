@@ -33,7 +33,7 @@ def render_planet():
 
     sun = drawSun()
 
-    microplanetChance = random.randint(1,1)
+    microplanetChance = random.randint(1,50)
     cloudChance = random.randint(1,10)
     ringChance = random.randint(1,10)
     moonChance = random.randint(1,10)
@@ -42,11 +42,12 @@ def render_planet():
 
     objects = []
 
-    if microplanetChance > 0:
+    if microplanetChance > 49:
         print("generating microplanet")
         rTreeType = random.randint(0,1)
         print("tree type: " + str(rTreeType))
-        objects = objects + [makeTrees(rTreeType) for x in range(150)]
+        objects = objects + [makeTrees(0) for x in range(random.randint(50,150))]
+        objects = objects + [makeTrees(1) for x in range(random.randint(50,150))]
         if starFissureChance == 999:
             planet = Difference(
                 drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0]),
@@ -55,24 +56,31 @@ def render_planet():
         else:
             planet = drawPlanet([0.062, 0.2, 0.039], 'marble', .5, .5, [1,1,1], [0,0,0], [0,0,0])
 
-        fire_tower = drawFireTower()
-        rocket = drawRocket()
+        if (random.randint(1,10)) > 6:
+            fire_tower = drawFireTower()
+            objects = objects + [fire_tower]
+        if (random.randint(1,10)) > 6:
+            if(random.randint(1,2)) > 1:
+                rocket = drawRocket()
+            else:
+                rocket = drawRocketOrbit()
+            objects = objects + [rocket]
 
 
-        objects = objects + [planet] + [fire_tower] + [rocket]
+        objects = objects + [planet]
 
     else:
         objects = objects + [drawPlanet(planet_color, planet_normal, normal_mag, rMag(), [1,1,1], [0,0,0], [0,0,0])]
         
         #Generate chance of clouds
 
-        if cloudChance > 6:
+        if cloudChance > 100:
             print("clouds")
             objects = objects + [drawClouds()]
-        if ringChance > 6 and clouds == []:
+        elif ringChance > 6:
             print("rings")
             objects = objects + drawRings(planet_color)
-        if moonChance > 6 and rings == []:
+        elif moonChance > 6:
             print("moons")
             objects = objects + drawMoon()
         
@@ -83,7 +91,7 @@ def render_planet():
 
     scene = Scene( Camera('angle', 30,'location',  [0.0 , 0,-10],
                         'look_at', [0 , 0 , 0.0]),
-                objects = objects + [sky, sun, planet],
+                objects = objects + [sky, sun],
                 included = ["colors.inc", "textures.inc"],
                 defaults = [Finish( 'ambient', 0.1, 'diffuse', 0.9)] )
 

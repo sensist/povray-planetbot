@@ -151,7 +151,7 @@ def drawMoon():
 
     moon_rot_x = random.randint(-15,15)
     moon_rot_y = random.randint(-45,45)
-    moon_rot_z = random.randint(-45,45)
+    moon_rot_z = random.randint(-180,180)
 
     moon = [Sphere ( [0,0,0], 1,
         Texture ( 
@@ -477,3 +477,76 @@ def drawRocket():
         'rotate', [random.randint(-120,-10),0,random.randint(-120,-10)]        
     )
     return(model)
+
+def drawRocketOrbit():
+
+    orbit_rot_x = random.randint(-15,15)
+    orbit_rot_y = random.randint(-45,45)
+    orbit_rot_z = random.randint(-45,45)
+
+    orbit_color = [.25,.55,.25]
+
+    orbits = Difference(
+        Cylinder([0,0,0],[0,0,.01], 1.5,
+                Texture(Pigment ('color', orbit_color)
+            ),
+                Finish('ambient',.8),
+                'translate', [0,0,0],
+                'rotate',[0, 0, 0] 
+            ),
+        Cylinder([0,0,-1],[0,0,1], 1.475,
+                'translate', [0,0,0],
+                'rotate',[0, 0, 0] 
+            ),
+        'scale',[1.00,1.0,1.0],
+        'rotate',[90,0,0]
+    )
+    
+
+
+    rocket = Union(
+        Difference(
+            Union(
+                Sphere([0,0,0],1,
+                    Pigment('color','White'),
+                    'scale',[1,2.5,1],
+                    'translate',[0,2,0]
+                ),
+                Cone([0,0,0],.75, [0,2,0],0,
+                    Pigment('color','Red'),
+                    'translate',[0,3.65,0]
+                )
+            ),
+            Box([-1,-1,-1],[1,.15,1])
+        ),
+        Difference(
+            Difference(
+                Union (
+                    Cylinder([0,0,0],[0,0,.1],2,
+                        'translate',[0,-1,0]
+                    ),
+                    Cylinder([0,0,0],[.1,0,0],2,
+                        'translate',[0,-1,0]
+                    ),
+                ),
+                Sphere([0,0,0],1.5,
+                    'translate',[0,-1.5,0]
+                ),
+                Pigment('color', 'Red'),
+                'translate',[0,.5,0]
+            ),
+            Box([-4,-4,-4],[4,-2,4])
+        ),
+        'scale',.075,
+        'rotate',[0,45,90],
+        'translate',[0,0,-1.5],
+        'translate',[.25,0,0]
+    )
+
+    rocket = Union(
+        rocket,
+        orbits,
+        'rotate',[orbit_rot_x,orbit_rot_y,orbit_rot_z]
+    )
+
+    return(rocket)
